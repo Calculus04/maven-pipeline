@@ -36,25 +36,6 @@ pipeline {
                 bat 'mvn test'
             }
         }
-
-        stage('Package') {
-            steps {
-                bat 'mvn package'
-            }
-        }
-
-        stage('Archive Artifacts') {
-            steps {
-                script {
-                    def jarExists = fileExists('target/CalculatorProject-1.0-SNAPSHOT.jar')
-                    if (jarExists) {
-                        archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-                    } else {
-                        error "Build failed: JAR file not found in target/"
-                    }
-                }
-            }
-        }
     }
 
     post {
@@ -62,10 +43,10 @@ pipeline {
             junit '**/target/surefire-reports/*.xml'  // Archive test reports
         }
         success {
-            echo 'Build and Tests Passed Successfully!'
+            echo '✅ Build and Tests Passed Successfully!'
         }
         failure {
-            echo 'Build Failed! Check the logs for errors.'
+            echo '❌ Build Failed! Check the logs for errors.'
         }
     }
 }
